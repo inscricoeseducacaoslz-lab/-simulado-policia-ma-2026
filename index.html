@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulado Área Policial - São Luís/MA 2026</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:#f2f4f7;
+  color:#17202a;
+}
+
+header{
+  background:#101820;
+  color:white;
+  padding:22px 15px;
+  text-align:center;
+}
+
+header h1{
+  margin:0 0 8px;
+  font-size:25px;
+}
+
+header p{
+  margin:4px;
+  font-size:14px;
+}
+
+.aviso{
+  background:#fff3cd;
+  color:#664d03;
+  padding:11px;
+  text-align:center;
+  font-size:13px;
+}
+
+.container{
+  max-width:750px;
+  margin:22px auto;
+  padding:15px;
+}
+
+.card{
+  background:white;
+  border-radius:14px;
+  padding:22px;
+  box-shadow:0 4px 15px rgba(0,0,0,.08);
+}
+
+.topo-prova{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:20px;
+  font-weight:bold;
+}
+
+#timer{
+  color:#b02a37;
+}
+
+.pergunta{
+  font-size:20px;
+  line-height:1.5;
+  margin-bottom:20px;
+  font-weight:bold;
+}
+
+.opcao{
+  display:block;
+  border:2px solid #ddd;
+  border-radius:10px;
+  padding:14px;
+  margin:10px 0;
+  cursor:pointer;
+}
+
+.opcao:hover{
+  background:#f5f5f5;
+}
+
+.opcao input{
+  margin-right:10px;
+  transform:scale(1.2);
+}
+
+.botoes{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  margin-top:25px;
+}
+
+button{
+  border:0;
+  padding:13px 18px;
+  border-radius:9px;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.anterior{
+  background:#dee2e6;
+}
+
+.proximo{
+  background:#0d6efd;
+  color:white;
+}
+
+.finalizar{
+  background:#198754;
+  color:white;
+}
+
+#resultado{
+  display:none;
+}
+
+.nota{
+  text-align:center;
+  font-size:30px;
+  font-weight:bold;
+  margin:20px 0;
+}
+
+.resumo{
+  background:#eef6ff;
+  padding:15px;
+  border-radius:10px;
+  margin:12px 0;
+}
+
+@media(max-width:600px){
+  .topo-prova{
+    display:block;
+  }
+
+  #timer{
+    margin-top:8px;
+  }
+
+  .pergunta{
+    font-size:18px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>SIMULADO DE TREINAMENTO – ÁREA POLICIAL</h1>
+<p>São Luís/MA – 2026</p>
+<p>30 questões • Tempo máximo: 2 horas</p>
+</header>
+
+<div class="aviso">
+Simulado fictício criado exclusivamente para treinamento. Não se trata de prova oficial nem de conteúdo de edital.
+</div>
+
+<div class="container">
+
+<div class="card" id="prova">
+
+<div class="topo-prova">
+<div id="contador">Questão 1 de 30</div>
+<div id="timer">02:00:00</div>
+</div>
+
+<div id="conteudo"></div>
+
+<div class="botoes">
+<button class="anterior" onclick="anterior()">← Anterior</button>
+<button class="proximo" id="btnProximo" onclick="proxima()">Próxima →</button>
+</div>
+
+</div>
+
+<div class="card" id="resultado">
+
+<h2 style="text-align:center">Resultado do Simulado</h2>
+
+<div class="nota" id="nota"></div>
+
+<div class="resumo" id="resumo"></div>
+
+<button class="proximo" onclick="location.reload()">
+Fazer novamente
+</button>
+
+</div>
+
+</div>
+
+<script>
+
+const questoes = [
+
+{
+q:"Durante um atendimento policial, o cidadão deve ser tratado com:",
+o:["Deboche","Respeito e profissionalismo","Agressividade","Indiferença"],
+c:1
+},
+
+{
+q:"Ao chegar a um local de acidente com vítima, uma atitude adequada é:",
+o:["Ignorar o ocorrido","Proteger o local e solicitar socorro","Filmar para redes sociais","Deixar todos entrarem no local"],
+c:1
+},
+
+{
+q:"A segurança pública tem como uma de suas finalidades:",
+o:["Proteger a sociedade e preservar a ordem","Organizar festas","Vender produtos","Administrar lojas"],
+c:0
+},
+
+{
+q:"Ao receber informações pessoais de uma vítima, o policial deve:",
+o:["Divulgar na internet","Tratar as informações com responsabilidade","Contar para qualquer pessoa","Usar para brincadeiras"],
+c:1
+},
+
+{
+q:"A comunicação clara entre policiais de uma equipe ajuda a:",
+o:["Aumentar a confusão","Melhorar a organização do trabalho","Impedir o atendimento","Criar discussões"],
+c:1
+},
+
+{
+q:"O número utilizado no Brasil para emergências da Polícia Militar é:",
+o:["190","192","193","1000"],
+c:0
+},
+
+{
+q:"Um policial deve agir de maneira:",
+o:["Profissional","Irresponsável","Desorganizada","Desrespeitosa"],
+c:0
+},
+
+{
+q:"Ao encontrar um objeto que pode servir como prova em uma ocorrência, o correto é:",
+o:["Descartar","Preservar adequadamente","Levar para casa","Entregar a qualquer pessoa"],
+c:1
+},
+
+{
+q:"Em uma ocorrência, ouvir atentamente as pessoas ajuda o policial a:",
+o:["Compreender melhor os fatos","Criar confusão","Perder informações","Evitar o atendimento"],
+c:0
+},
+
+{
+q:"Ao trabalhar em equipe, o policial deve:",
+o:["Cooperar com os colegas","Ignorar todos","Esconder informações importantes","Criar conflitos"],
+c:0
+},
+
+{
+q:"O uso da força por agentes de segurança deve observar:",
+o:["Legalidade e necessidade","Vontade pessoal","Raiva","Vingança"],
+c:0
+},
+
+{
+q:"Uma pessoa encontrada ferida deve receber:",
+o:["Ajuda e acionamento de atendimento adequado","Deboche","Abandono","Ameaças"],
+c:0
+},
+
+{
+q:"Manter a calma durante uma ocorrência contribui para:",
+o:["Uma atuação mais segura","Aumentar o conflito","Criar pânico","Impedir qualquer decisão"],
+c:0
+},
+
+{
+q:"Ao registrar uma ocorrência, as informações devem ser:",
+o:["Claras e verdadeiras","Inventadas","Exageradas","Baseadas em boatos"],
+c:0
+},
+
+{
+q:"Um documento oficial deve ser escrito com linguagem:",
+o:["Clara e objetiva","Cheia de gírias","Confusa","Sem informações"],
+c:0
+},
+
+{
+q:"Preservar um local de crime significa:",
+o:["Evitar alterações desnecessárias até os procedimentos adequados","Permitir que todos entrem","Mudar objetos de lugar","Limpar o local imediatamente"],
+c:0
+},
+
+{
+q:"Respeitar a dignidade das pessoas durante uma abordagem é:",
+o:["Uma obrigação profissional","Opcional","Proibido","Desnecessário"],
+c:0
+},
+
+{
+q:"Ao receber uma ordem legal de um superior, o policial deve:",
+o:["Cumpri-la conforme as normas","Ignorá-la sempre","Publicá-la nas redes sociais","Transformá-la em brincadeira"],
+c:0
+},
+
+{
+q:"Uma informação importante sobre uma ocorrência deve ser:",
+o:["Comunicada pelos meios adequados","Escondida da equipe","Postada na internet","Alterada"],
+c:0
+},
+
+{
+q:"Durante o serviço, agir com ética significa:",
+o:["Agir de forma correta e responsável","Usar o cargo para benefício pessoal","Mentir em documentos","Desrespeitar cidadãos"],
+c:0
+},
+
+{
+q:"Ao perceber uma situação de perigo, o policial deve primeiro:",
+o:["Avaliar a situação e agir com segurança","Agir sem observar nada","Ignorar o risco","Criar mais perigo"],
+c:0
+},
+
+{
+q:"O trabalho policial exige atenção principalmente porque:",
+o:["As decisões podem afetar a segurança das pessoas","Não existe responsabilidade","Toda ocorrência é igual","Nenhuma decisão é importante"],
+c:0
+},
+
+{
+q:"Em uma abordagem, uma orientação dada ao cidadão deve ser:",
+o:["Clara e compreensível","Confusa","Contraditória","Feita apenas com gritos"],
+c:0
+},
+
+{
+q:"Caso uma criança esteja perdida, uma atitude adequada é:",
+o:["Providenciar proteção e buscar os responsáveis pelos meios corretos","Ignorar","Mandá-la embora sozinha","Publicar seus dados pessoais livremente"],
+c:0
+},
+
+{
+q:"Um policial que presencia uma emergência deve:",
+o:["Adotar as providências compatíveis com a situação","Fingir que não viu","Abandonar imediatamente","Incentivar o conflito"],
+c:0
+},
+
+{
+q:"O respeito às leis durante a atividade policial é:",
+o:["Fundamental","Desnecessário","Opcional","Proibido"],
+c:0
+},
+
+{
+q:"Uma equipe bem organizada tende a:",
+o:["Realizar o trabalho com maior segurança e eficiência","Criar mais confusão","Perder todas as informações","Evitar qualquer comunicação"],
+c:0
+},
+
+{
+q:"Antes de transmitir uma informação oficial, é importante:",
+o:["Verificar sua correção","Inventar detalhes","Espalhar boatos","Alterar os fatos"],
+c:0
+},
+
+{
+q:"No atendimento ao público, educação e respeito ajudam a:",
+o:["Melhorar a comunicação","Aumentar conflitos","Impedir o diálogo","Criar desorganização"],
+c:0
+},
+
+{
+q:"Ao finalizar uma ocorrência, o policial deve:",
+o:["Registrar corretamente as informações necessárias","Apagar todas as informações","Inventar uma versão diferente","Não comunicar nada"],
+c:0
+}
+
+];
+
+let atual = 0;
+let respostas = Array(questoes.length).fill(null);
+
+function mostrarQuestao(){
+
+const q = questoes[atual];
+
+document.getElementById("contador").innerText =
+"Questão " + (atual+1) + " de " + questoes.length;
+
+let html = `<div class="pergunta">${atual+1}. ${q.q}</div>`;
+
+q.o.forEach((op,i)=>{
+
+const marcado = respostas[atual] === i ? "checked" : "";
+
+html += `
+<label class="opcao">
+<input type="radio"
+name="resposta"
+value="${i}"
+${marcado}
+onchange="salvarResposta(${i})">
+${String.fromCharCode(65+i)}) ${op}
+</label>
+`;
+
+});
+
+document.getElementById("conteudo").innerHTML = html;
+
+const botao = document.getElementById("btnProximo");
+
+if(atual === questoes.length-1){
+botao.innerText="Finalizar prova";
+botao.className="finalizar";
+}else{
+botao.innerText="Próxima →";
+botao.className="proximo";
+}
+
+}
+
+function salvarResposta(i){
+respostas[atual]=i;
+}
+
+function proxima(){
+
+if(atual < questoes.length-1){
+atual++;
+mostrarQuestao();
+window.scrollTo(0,0);
+}else{
+finalizar();
+}
+
+}
+
+function anterior(){
+
+if(atual>0){
+atual--;
+mostrarQuestao();
+window.scrollTo(0,0);
+}
+
+}
+
+function finalizar(){
+
+let acertos=0;
+
+questoes.forEach((q,i)=>{
+if(respostas[i]===q.c){
+acertos++;
+}
+});
+
+let percentual=Math.round((acertos/questoes.length)*100);
+
+document.getElementById("prova").style.display="none";
+document.getElementById("resultado").style.display="block";
+
+document.getElementById("nota").innerHTML =
+`${acertos}/30 acertos<br>${percentual}%`;
+
+document.getElementById("resumo").innerHTML =
+`Você acertou <strong>${acertos}</strong> questões e errou
+<strong>${30-acertos}</strong>.<br><br>
+Resultado: <strong>${percentual}%</strong>.`;
+
+window.scrollTo(0,0);
+
+}
+
+let segundos = 2*60*60;
+
+function atualizarTempo(){
+
+let h=Math.floor(segundos/3600);
+let m=Math.floor((segundos%3600)/60);
+let s=segundos%60;
+
+document.getElementById("timer").innerText =
+String(h).padStart(2,"0")+":"+
+String(m).padStart(2,"0")+":"+
+String(s).padStart(2,"0");
+
+if(segundos<=0){
+clearInterval(relogio);
+alert("O tempo terminou. A prova será finalizada.");
+finalizar();
+}
+
+segundos--;
+
+}
+
+const relogio=setInterval(atualizarTempo,1000);
+
+mostrarQuestao();
+atualizarTempo();
+
+</script>
+
+</body>
+</html>
